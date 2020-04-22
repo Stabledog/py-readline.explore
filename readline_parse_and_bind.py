@@ -1,4 +1,4 @@
-#readline_parse_and_bind.py
+#!/usr/bin/env python3.7
 try:
     import gnureadline as readline
 except ImportError:
