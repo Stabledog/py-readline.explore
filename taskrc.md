@@ -10,8 +10,6 @@ py=`which python3.7`
 function run_one {
 #Help
     xtty=$(cat .diagloop-tty)
-    echo "xtty=${xtty}"
-    echo "hello" >${xtty}
     #$py ./readline_parse_and_bind.py 9>$xtty
     $py ./readline_completer.py 9>${xtty}
 }
