@@ -6,7 +6,8 @@
 ```bash
 
 py=`which python3.7`
-scr=readline_completer.py
+#scr=readline_completer.py
+scr=readline_buffer.py
 
 function get_xtty {
     local xtty=$(cat .diagloop-tty)

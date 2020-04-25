@@ -21,10 +21,10 @@ class BufferAwareCompleter:
             words = origline.split()
 
             logger.debug(f'origline={origline}\n' +
-              f'begin={begin}' +
-              f'end={end}' +
-              f'being_completed={being_completed}' +
-              f'words={words}')
+              f'begin={begin}\n' +
+              f'end={end}\n' +
+              f'being_completed={being_completed}\n' +
+              f'words={words}\n')
             if not words:
                 self.current_candidates = sorted( self.options.keys() )
             else:
@@ -43,7 +43,40 @@ class BufferAwareCompleter:
                             w for w in candidates if w.startswith(being_completed)
                         ]
                     else:
+                        # matching empty string,
+                        # use all candidates:
+                        self.current_candidates = candidates
 
-                except:
-                    #
+                    logger.debug(f'candidates={self.current_candidates}')
+
+                except (KeyError,IndexError) as err:
+                    logger.error(f'completion error: {err}')
+                    self.current_candidates = []
+        try:
+            response = self.current_candidates[state]
+        except IndexError:
+            response = None
+        logger.debug(f'complete({text},{state}) => {response}')
+        return response
+
+def input_loop():
+    line = ''
+    while line != 'stop':
+        line = input('Prompt ("stop" to quit): ')
+        print(f'Dispatch {line}')
+
+# Register our completer function
+completer = BufferAwareCompleter({
+    'list': ['files','directories'],
+    'print': ['byname', 'bysize'],
+    'stop': [] }
+    )
+
+readline.set_completer(completer.complete)
+
+# Use the tab key for completion
+readline.parse_and_bind('tab: complete')
+
+# Prompt the user for text
+input_loop()
 
